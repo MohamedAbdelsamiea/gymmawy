@@ -1,0 +1,53 @@
+services:
+  frontend:
+    build:
+      context: ./gymmawy-frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    restart: unless-stopped
+    depends_on:
+      - backend
+    networks:
+      - gymmawy-network
+
+  backend:
+    build:
+      context: ./gymmawy-backend
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - PORT=5000
+      - DATABASE_URL=postgresql://gymmawy:gymmawy123@db:5432/gymmawy_db
+    volumes:
+      - ./gymmawy-backend/uploads:/app/uploads
+      - ./gymmawy-backend/logs:/app/logs
+    depends_on:
+      - db
+    networks:
+      - gymmawy-network
+
+  db:
+    image: postgres:15-alpine
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=gymmawy_db
+      - POSTGRES_USER=gymmawy
+      - POSTGRES_PASSWORD=gymmawy123
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./gymmawy-backend/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    ports:
+      - "5434:5432"
+    networks:
+      - gymmawy-network
+
+volumes:
+  postgres_data:
+
+networks:
+  gymmawy-network:
+    driver: bridge
