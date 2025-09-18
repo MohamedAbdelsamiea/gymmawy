@@ -8,7 +8,7 @@ This guide provides step-by-step instructions for deploying your Gymmawy applica
 
 ```bash
 # One-command setup (easiest)
-curl -fsSL https://raw.githubusercontent.com/MohamedAbdelsamiea/gymmawy-/main/one-command-setup.sh | bash
+curl -fsSL https://raw.githubusercontent.com/yourusername/gymmawy/main/one-command-setup.sh | bash
 ```
 
 **What you need:**
@@ -74,7 +74,7 @@ gymmawy/
 
 ### Option 1: One-Command Setup (Easiest)
 ```bash
-curl -fsSL https://raw.githubusercontent.com/MohamedAbdelsamiea/gymmawy-/main/one-command-setup.sh | bash
+curl -fsSL https://raw.githubusercontent.com/yourusername/gymmawy/main/one-command-setup.sh | bash
 ```
 - **Best for**: Quick testing, development
 - **Time**: 5-10 minutes
@@ -143,7 +143,7 @@ git add .
 git commit -m "Add Docker deployment configuration"
 
 # Add remote origin (replace with your GitHub repo URL)
-git remote add origin https://github.com/MohamedAbdelsamiea/gymmawy-.git
+git remote add origin https://github.com/yourusername/gymmawy.git
 
 # Push to main branch
 git push -u origin main
@@ -189,7 +189,7 @@ build/
 ssh root@your-vps-ip
 
 # Run one-command setup
-curl -fsSL https://raw.githubusercontent.com/MohamedAbdelsamiea/gymmawy-/main/one-command-setup.sh | bash
+curl -fsSL https://raw.githubusercontent.com/yourusername/gymmawy/main/one-command-setup.sh | bash
 ```
 
 **That's it!** Your app will be running at `http://your-vps-ip:3000`
@@ -236,7 +236,7 @@ mkdir -p /opt/gymmawy
 cd /opt/gymmawy
 
 # Clone your repository
-git clone https://github.com/MohamedAbdelsamiea/gymmawy-.git .
+git clone https://github.com/yourusername/gymmawy.git .
 
 # Or if you want to pull updates later
 git pull origin main
@@ -555,7 +555,7 @@ This repository includes several automated setup scripts to make deployment easi
 
 ### 🚀 One-Command Setup
 ```bash
-curl -fsSL https://raw.githubusercontent.com/MohamedAbdelsamiea/gymmawy-/main/one-command-setup.sh | bash
+curl -fsSL https://raw.githubusercontent.com/yourusername/gymmawy/main/one-command-setup.sh | bash
 ```
 - **Best for**: Quick testing, development
 - **Time**: 5-10 minutes

@@ -15,7 +15,7 @@ For a fast setup with IP access:
 
 ```bash
 # Download and run the quick setup script
-curl -fsSL https://raw.githubusercontent.com/MohamedAbdelsamiea/gymmawy-/main/quick-setup.sh | bash
+curl -fsSL https://raw.githubusercontent.com/yourusername/gymmawy/main/quick-setup.sh | bash
 ```
 
 Or if you have the files locally:
@@ -40,7 +40,7 @@ For production with domain and SSL:
 
 ```bash
 # Download and run the full setup script
-curl -fsSL https://raw.githubusercontent.com/MohamedAbdelsamiea/gymmawy-/main/setup-vps.sh | bash
+curl -fsSL https://raw.githubusercontent.com/yourusername/gymmawy/main/setup-vps.sh | bash
 ```
 
 Or locally:

@@ -6,7 +6,7 @@ Deploy your Gymmawy application to any VPS with just one command!
 
 ```bash
 # Deploy to your VPS in one command
-curl -fsSL https://raw.githubusercontent.com/MohamedAbdelsamiea/gymmawy-/main/one-command-setup.sh | bash
+curl -fsSL https://raw.githubusercontent.com/yourusername/gymmawy/main/one-command-setup.sh | bash
 ```
 
 **What you need:**

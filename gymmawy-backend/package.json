@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "node --watch --env-file=.env src/server.js",
-    "start": "node src/server.js",
+    "start": "node --env-file=.env src/server.js",
     "seed": "node scripts/seed.js",
     "create-admin": "node scripts/create-admin.js",
     "verify-admin": "node scripts/verify-admin.js",

@@ -97,9 +97,10 @@ Thumbs.db
 *.sqlite
 *.db
 
-# Uploads
+# Uploads (exclude all uploads except backend uploads)
 uploads/
 public/uploads/
+!gymmawy-backend/uploads/
 
 # Data exports (keep for deployment)
 data-exports/

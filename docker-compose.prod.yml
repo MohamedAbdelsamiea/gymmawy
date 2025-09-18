@@ -1,0 +1,81 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  db:
+    image: postgres:16-alpine
+    container_name: gymmawy-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: gymmawy_user
+      POSTGRES_PASSWORD: gymmawy_secure_password_2024
+      POSTGRES_DB: gymmawy
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./gymmawy-backend/prisma/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - gymmawy-network
+
+  # Backend API
+  backend:
+    build:
+      context: ./gymmawy-backend
+      dockerfile: Dockerfile
+    container_name: gymmawy-backend
+    restart: unless-stopped
+    env_file:
+      - ./gymmawy-backend/.env.production
+    volumes:
+      - ./gymmawy-backend/uploads:/app/uploads
+      - ./gymmawy-backend/logs:/app/logs
+    depends_on:
+      - db
+    networks:
+      - gymmawy-network
+    command: >
+      sh -c "
+        echo 'Waiting for database...' &&
+        npx prisma migrate deploy &&
+        npx prisma generate &&
+        npm start
+      "
+
+  # Frontend
+  frontend:
+    build:
+      context: ./gymmawy-frontend
+      dockerfile: Dockerfile.prod
+    container_name: gymmawy-frontend
+    restart: unless-stopped
+    env_file:
+      - ./gymmawy-frontend/.env.production
+    depends_on:
+      - backend
+    networks:
+      - gymmawy-network
+
+  # Nginx Reverse Proxy
+  nginx:
+    image: nginx:alpine
+    container_name: gymmawy-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - gymmawy-network
+
+volumes:
+  db_data:
+
+networks:
+  gymmawy-network:
+    driver: bridge
