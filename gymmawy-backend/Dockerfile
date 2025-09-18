@@ -11,6 +11,18 @@ RUN npm ci
 # Copy source code
 COPY . .
 
+# Create .env file with default values
+RUN echo 'DATABASE_URL="postgresql://gymmawy:gymmawy123@db:5432/gymmawy_db"' > .env && \
+    echo 'JWT_SECRET="a1b2c3d4e5f6789012345678901234567890abcdef1234567890abcdef123456"' >> .env && \
+    echo 'JWT_REFRESH_SECRET="f6e5d4c3b2a1098765432109876543210987654321fedcba0987654321fedcba"' >> .env && \
+    echo 'EMAIL_HOST="smtp.gmail.com"' >> .env && \
+    echo 'EMAIL_PORT=587' >> .env && \
+    echo 'EMAIL_USER="onboarding@resend.dev"' >> .env && \
+    echo 'EMAIL_PASS="your-app-password"' >> .env && \
+    echo 'PORT=5000' >> .env && \
+    echo 'NODE_ENV=production' >> .env && \
+    echo 'CORS_ORIGIN="http://5.189.152.130:3000"' >> .env
+
 # Generate Prisma client
 RUN npx prisma generate
 
