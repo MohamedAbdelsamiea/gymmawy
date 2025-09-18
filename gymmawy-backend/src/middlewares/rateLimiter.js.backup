@@ -1,0 +1,115 @@
+import rateLimit from 'express-rate-limit';
+import RedisStore from 'rate-limit-redis';
+import Redis from 'ioredis';
+import { ipKeyGenerator } from 'express-rate-limit';
+
+// Redis client for rate limiting
+const redis = new Redis(process.env.REDIS_URL || 'redis://localhost:6379');
+
+// Helper function to create Redis store with unique prefix
+const createStore = (prefix) => new RedisStore({
+  sendCommand: (...args) => redis.call(...args),
+  prefix: prefix,
+});
+
+// General rate limiter
+export const generalLimiter = rateLimit({
+  store: createStore('general:'),
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+  message: {
+    success: false,
+    data: null,
+    meta: {},
+    errors: [{ message: 'Too many requests from this IP, please try again later.' }]
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+// Strict rate limiter for sensitive endpoints
+export const strictLimiter = rateLimit({
+  store: createStore('strict:'),
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 10, // limit each IP to 10 requests per windowMs
+  message: {
+    success: false,
+    data: null,
+    meta: {},
+    errors: [{ message: 'Too many requests from this IP, please try again later.' }]
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+// Auth rate limiter
+export const authLimiter = rateLimit({
+  store: createStore('auth:'),
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 5, // limit each IP to 5 login attempts per windowMs
+  message: {
+    success: false,
+    data: null,
+    meta: {},
+    errors: [{ message: 'Too many login attempts, please try again later.' }]
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+// Payment rate limiter
+export const paymentLimiter = rateLimit({
+  store: createStore('payment:'),
+  windowMs: 5 * 60 * 1000, // 5 minutes
+  max: 3, // limit each IP to 3 payment attempts per windowMs
+  message: {
+    success: false,
+    data: null,
+    meta: {},
+    errors: [{ message: 'Too many payment attempts, please try again later.' }]
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+// Admin rate limiter
+export const adminLimiter = rateLimit({
+  store: createStore('admin:'),
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 50, // limit each IP to 50 admin requests per windowMs
+  message: {
+    success: false,
+    data: null,
+    meta: {},
+    errors: [{ message: 'Too many admin requests, please try again later.' }]
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+// API key rate limiter (for external integrations)
+export const apiKeyLimiter = rateLimit({
+  store: createStore('apikey:'),
+  windowMs: 60 * 1000, // 1 minute
+  max: 60, // limit each API key to 60 requests per minute
+  keyGenerator: (req) => {
+    return req.headers['x-api-key'] || ipKeyGenerator(req);
+  },
+  message: {
+    success: false,
+    data: null,
+    meta: {},
+    errors: [{ message: 'API rate limit exceeded, please try again later.' }]
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+export default {
+  generalLimiter,
+  strictLimiter,
+  authLimiter,
+  paymentLimiter,
+  adminLimiter,
+  apiKeyLimiter
+};
